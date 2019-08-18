@@ -1,38 +1,39 @@
 syntax = "proto3";
 package godna;
-option go_package = "github.com/wxio/godna/pb/config";
+option go_package = "github.com/wxio/godna/pb/dna/config";
 
-import "google/protobuf/descriptor.proto";
+import "0000STORE/validation.proto";
+// import "google/protobuf/descriptor.proto";
 
-extend google.protobuf.FileOptions {
-    Config cfg = 49999;
-}
-extend google.protobuf.FieldOptions {
-    string help = 49999;
-}
+// extend google.protobuf.FileOptions {
+//     Config cfg = 49999;
+// }
+// extend google.protobuf.FieldOptions {
+//     string help = 49999;
+// }
 
 message Config {
     string   host_owner              = 1
-    [(help) = "host and owner of the repo of the generated code eg. github.com/microsoft"];
+    [(wxio.extensions.store.help) = "host and owner of the repo of the generated code eg. github.com/microsoft"];
     //TODO protobuf validators eg [(validator.maditory) = true]
     string   repo_name               = 2
-    [(help) = "repo name of the generated code eg go-vscode"];
+    [(wxio.extensions.store.help) = "repo name of the generated code eg go-vscode"];
     repeated string includes        = 3
-    [(help) = "protoc path -I eg [ '../microsoft-dna/vendor' ]"];
+    [(wxio.extensions.store.help) = "protoc path -I eg [ '../microsoft-dna/vendor' ]"];
     repeated string rel_imps         = 4
-    [(help) = "prefix of go.mod local replacements. eg [ 'services-' ] - todo remove"];
+    [(wxio.extensions.store.help) = "prefix of go.mod local replacements. eg [ 'services-' ] - todo remove"];
     repeated string require         = 5 
-    [(help) = "list of go mod edit -require= eg [ 'github.com/golangq/q@v1.0.7' ]"];
+    [(wxio.extensions.store.help) = "list of go mod edit -require= eg [ 'github.com/golangq/q@v1.0.7' ]"];
     string   src_dir                 = 6
-    [(help) = "source directory eg ../microsoft-dna/store/project - note not included as a -I"];
+    [(wxio.extensions.store.help) = "source directory eg ../microsoft-dna/store/project - note not included as a -I"];
     // string   output_root              = 7
-    // [(help) = "output root directory eg ."];
+    // [(wxio.extensions.store.help) = "output root directory eg ."];
     repeated Pass pass            = 8
-    [(help) = "common separated list of commands to run. Possible commands are protoc,modinit,modrequire,modreplace,modtidy,gittag (default [\"protoc,modinit,modrequire,modreplace\", \"modtidy\", \"gittag\", \"modrequirelocal\"])"];
+    [(wxio.extensions.store.help) = "common separated list of commands to run. Possible commands are protoc,modinit,modrequire,modreplace,modtidy,gittag (default [\"protoc,modinit,modrequire,modreplace\", \"modtidy\", \"gittag\", \"modrequirelocal\"])"];
     repeated string plugin_path          = 9
-    [(help) = "Name and path of a pluging eg protoc-gen-NAME=path/to/mybinary. Much also specify --generator, does not imply it  is present"];
+    [(wxio.extensions.store.help) = "Name and path of a pluging eg protoc-gen-NAME=path/to/mybinary. Much also specify --generator, does not imply it  is present"];
     repeated PluginOutDir plugin_output_dir = 10
-    [(help) = "output directory for the plugins. eg 'pb' and 'oapi' for 1. Go, Grpc, Micro and Ecosytem-Gateway and 2. Swagger"];
+    [(wxio.extensions.store.help) = "output directory for the plugins. eg 'pb' and 'oapi' for 1. Go, Grpc, Micro and Ecosytem-Gateway and 2. Swagger"];
     //
     message PluginOutDir {
         string path = 1;
