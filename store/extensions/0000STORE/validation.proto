@@ -1,12 +1,17 @@
 syntax = "proto3";
-package wxio.extensions.store;
+package wxio.dna;
 option go_package = "github.com/wxio/godna/pb/extensions/store";
 
 import "google/protobuf/descriptor.proto";
 
-// extend google.protobuf.FileOptions {
-// }
+extend google.protobuf.FileOptions {
+    Store store = 60000;
+}
 
 extend google.protobuf.FieldOptions {
     string help = 49999;
+}
+
+message Store {
+    bool go_mod = 10;
 }

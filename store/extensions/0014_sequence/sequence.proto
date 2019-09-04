@@ -1,0 +1,36 @@
+syntax = "proto3";
+package wxio.dna.extensions.sequence;
+option go_package = "github.com/wxio/godna/pb/extensions/sequence";
+
+import "google/protobuf/descriptor.proto";
+
+// extend google.protobuf.FileOptions {
+// }
+
+extend google.protobuf.FieldOptions {
+    Sequence sequence = 50014;
+}
+
+message Sequence {
+    repeated string participant = 1;
+    repeated SimpleReqRsp simpleCall = 2;
+}
+
+message SimpleReqRsp {
+    string from = 1;
+    string to = 2;
+    string desc = 3;
+    
+}
+
+// sequenceDiagram
+//     participant Alice
+//     participant Bob
+//     Alice->>John: Hello John, how are you?
+//     loop Healthcheck
+//         John->>John: Fight against hypochondria
+//     end
+//     Note right of John: Rational thoughts <br/>prevail!
+//     John-->>Alice: Great!
+//     John->>Bob: How about you?
+//     Bob-->>John: Jolly good!

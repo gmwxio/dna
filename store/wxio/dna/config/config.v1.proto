@@ -2,7 +2,7 @@ syntax = "proto3";
 package godna;
 option go_package = "github.com/wxio/godna/pb/dna/config";
 
-import "0000STORE/validation.proto";
+import "extensions/0000STORE/validation.proto";
 // import "google/protobuf/descriptor.proto";
 
 // extend google.protobuf.FileOptions {
@@ -13,27 +13,27 @@ import "0000STORE/validation.proto";
 // }
 
 message Config {
-    string   host_owner              = 1
-    [(wxio.extensions.store.help) = "host and owner of the repo of the generated code eg. github.com/microsoft"];
-    //TODO protobuf validators eg [(validator.maditory) = true]
-    string   repo_name               = 2
-    [(wxio.extensions.store.help) = "repo name of the generated code eg go-vscode"];
+    // string   host_owner              = 1
+    // [(wxio.dna.help) = "host and owner of the repo of the generated code eg. github.com/microsoft"];
+    // //TODO protobuf validators eg [(validator.maditory) = true]
+    // string   repo_name               = 2
+    // [(wxio.dna.help) = "repo name of the generated code eg go-vscode"];
     repeated string includes        = 3
-    [(wxio.extensions.store.help) = "protoc path -I eg [ '../microsoft-dna/vendor' ]"];
-    repeated string rel_imps         = 4
-    [(wxio.extensions.store.help) = "prefix of go.mod local replacements. eg [ 'services-' ] - todo remove"];
+    [(wxio.dna.help) = "protoc path -I eg [ '../microsoft-dna/vendor' ]"];
     repeated string require         = 5 
-    [(wxio.extensions.store.help) = "list of go mod edit -require= eg [ 'github.com/golangq/q@v1.0.7' ]"];
+    [(wxio.dna.help) = "list of go mod edit -require= eg [ 'github.com/golangq/q@v1.0.7' ]"];
     string   src_dir                 = 6
-    [(wxio.extensions.store.help) = "source directory eg ../microsoft-dna/store/project - note not included as a -I"];
-    // string   output_root              = 7
-    // [(wxio.extensions.store.help) = "output root directory eg ."];
-    repeated Pass pass            = 8
-    [(wxio.extensions.store.help) = "common separated list of commands to run. Possible commands are protoc,modinit,modrequire,modreplace,modtidy,gittag (default [\"protoc,modinit,modrequire,modreplace\", \"modtidy\", \"gittag\", \"modrequirelocal\"])"];
-    repeated string plugin_path          = 9
-    [(wxio.extensions.store.help) = "Name and path of a pluging eg protoc-gen-NAME=path/to/mybinary. Much also specify --generator, does not imply it  is present"];
+    [(wxio.dna.help) = "source directory eg ../microsoft-dna/store/project - note not included as a -I"];
+    // repeated Pass pass            = 8
+    // [(wxio.dna.help) = "common separated list of commands to run. Possible commands are protoc,modinit,modrequire,modreplace,modtidy,gittag (default [\"protoc,modinit,modrequire,modreplace\", \"modtidy\", \"gittag\", \"modrequirelocal\"])"];
+    // repeated string plugin_path          = 9
+    // [(wxio.dna.help) = "Name and path of a pluging eg protoc-gen-NAME=path/to/mybinary. Much also specify --generator, does not imply it  is present"];
     repeated PluginOutDir plugin_output_dir = 10
-    [(wxio.extensions.store.help) = "output directory for the plugins. eg 'pb' and 'oapi' for 1. Go, Grpc, Micro and Ecosytem-Gateway and 2. Swagger"];
+    [(wxio.dna.help) = "output directory for the plugins. eg 'pb' and 'oapi' for 1. Go, Grpc, Micro and Ecosytem-Gateway and 2. Swagger"];
+    string go_package_prefix = 11
+    [(wxio.dna.help) = "manditory; prefix of Go package names to process. Uses; match package name, remove prefix to find output directory for protoc"];
+    //TODO protobuf validators eg [(validator.maditory) = true]
+    ;
     //
     message PluginOutDir {
         string path = 1;
@@ -68,6 +68,7 @@ message Config {
                 Micro micro = 2;
                 Grpc_Gateway grpc_gateway = 3;
                 Swagger swagger = 4;
+                Gotag gotag = 5;
             }
         }
         message Go {
@@ -86,6 +87,9 @@ message Config {
             Paths paths = 2;
             // import map
             //
+        }
+        message Gotag {
+            Paths paths = 2;
         }
         message Grpc_Gateway {
             Paths paths = 2;

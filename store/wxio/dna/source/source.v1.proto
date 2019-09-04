@@ -1,0 +1,65 @@
+syntax = "proto3";
+package wxio.dna.source;
+option go_package = "github.com/wxio/godna/pb/dna/source";
+
+// import "google/protobuf/descriptor.proto";
+import "extensions/0000STORE/validation.proto";
+
+// extend google.protobuf.FileOptions {
+//     Config cfg = 49999;
+// }
+// extend google.protobuf.FieldOptions {
+//     string help = 49999;
+// }
+
+message DnaData {
+    repeated Module modules = 1;
+}
+
+message Module {
+    string RelDir = 1;
+    string Module = 2;
+}
+message ModulePlus {
+    Module module = 1;
+    repeated PkgWithFilesImports pkgs = 2;
+}
+message PkgWithFilesImports {
+	string ContainingMod = 1;
+	string RelDir        = 2;
+	string Package       = 3;
+	repeated string Files    = 4;
+	repeated string Imports  = 5;
+}
+message PackageWithPaths {
+    string absolute_path = 1;
+    string relative_from_module_path = 2;
+    bool dirty = 3;
+    repeated string dirty_files = 4;  
+    bool module = 5;
+    PkgWithFilesImports pkg = 6;
+}
+message ModuleWithPaths {
+    ModulePlus module = 1;
+    PackageWithPaths pkg = 2;
+    repeated PackageWithPaths imports = 3;
+}
+
+service DnaProcess {
+    rpc CollectGoModules (CollectGoModulesRequest) returns (CollectGoModulesResponse);
+    rpc CollectFilesAndImports (CollectFilesAndImportsRequest) returns (CollectFilesAndImportsResponse);
+}
+
+message CollectGoModulesRequest {
+    string ScrDir = 1;
+}
+message CollectGoModulesResponse {
+    repeated Module modules = 1;
+}
+
+message CollectFilesAndImportsRequest {
+    repeated Module modules = 1;
+}
+message CollectFilesAndImportsResponse {
+    repeated ModulePlus modules_plus = 1;
+}
