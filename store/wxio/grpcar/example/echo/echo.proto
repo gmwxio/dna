@@ -1,0 +1,61 @@
+// copied from github.com/grpc/grpc-go/examples/features/proto/echo/echo.proto
+syntax = "proto3";
+
+package wxio.grpcar.example.echo;
+option go_package = "github.com/wxio/grpcar/example/echo";
+
+import "google/api/annotations.proto";
+// import "protoc-gen-swagger/options/annotations.proto";
+import "grpcar/options/annotations.proto";
+
+
+// EchoRequest is the request for echo.
+message EchoRequest {
+  string message = 1;
+}
+
+// EchoResponse is the response for echo.
+message EchoResponse {
+  string message = 1;
+}
+
+// Echo is the echo service.
+service Echo {
+  option (wxio.grpcar.options.service) = {
+    security: {
+      security_requirement: {
+        key: "ApiKeyAuth_default";
+        value: {}
+      }
+    }
+  };
+
+  // UnaryEcho is unary echo.
+  rpc UnaryEcho(EchoRequest) returns (EchoResponse) {
+    option (google.api.http) = {
+			post: "/v1/echo"
+		};
+    // option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+    option (wxio.grpcar.options.method) = {
+      security: {
+				security_requirement: {
+					key: "ApiKeyAuth";
+					value: {}
+				}
+				security_requirement: {
+					key: "OAuth2";
+					value: {
+						scope: "read";
+						scope: "write";
+					}
+				}
+			}
+		};
+  }
+  // ServerStreamingEcho is server side streaming.
+  rpc ServerStreamingEcho(EchoRequest) returns (stream EchoResponse) {}
+  // ClientStreamingEcho is client side streaming.
+  rpc ClientStreamingEcho(stream EchoRequest) returns (EchoResponse) {}
+  // BidirectionalStreamingEcho is bidi streaming.
+  rpc BidirectionalStreamingEcho(stream EchoRequest) returns (stream EchoResponse) {}
+}

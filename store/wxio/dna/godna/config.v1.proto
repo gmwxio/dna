@@ -1,5 +1,5 @@
 syntax = "proto3";
-package godna;
+package wxio.dna.godna;
 option go_package = "github.com/wxio/godna/pb/config";
 
 import "google/protobuf/descriptor.proto";

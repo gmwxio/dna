@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package wxio.grpcar.options;
+option go_package = "github.com/wxio/grpcar/options";
+
+import "google/protobuf/descriptor.proto";
+import "grpcar/options/auth.proto";
+
+// extend google.protobuf.FileOptions {
+//   File file = 11042;
+// }
+extend google.protobuf.ServiceOptions {
+  Service service = 11042;
+}
+extend google.protobuf.MethodOptions {
+  Method method = 11042;
+}
+extend google.protobuf.MessageOptions {
+  Message message = 11042;
+}
+extend google.protobuf.FieldOptions {
+  Field field = 11042;
+}
