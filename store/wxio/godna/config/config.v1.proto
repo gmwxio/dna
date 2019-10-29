@@ -1,6 +1,6 @@
 syntax = "proto3";
 package wxio.dna.godna;
-option go_package = "github.com/wxio/godna/pb/config";
+option go_package = "github.com/wxio/godna/config";
 
 import "google/protobuf/descriptor.proto";
 
@@ -33,6 +33,9 @@ message Config {
     [(help) = "Name and path of a pluging eg protoc-gen-NAME=path/to/mybinary. Much also specify --generator, does not imply it  is present"];
     repeated PluginOutDir plugin_output_dir = 10
     [(help) = "output directory for the plugins. eg 'pb' and 'oapi' for 1. Go, Grpc, Micro and Ecosytem-Gateway and 2. Swagger"];
+    string go_package_prefix = 11
+    [(help) = "manditory; prefix of Go package names to process. Uses; match package name, remove prefix to find output directory for protoc"];
+
     //
     message PluginOutDir {
         string path = 1;
@@ -67,6 +70,8 @@ message Config {
                 Micro micro = 2;
                 Grpc_Gateway grpc_gateway = 3;
                 Swagger swagger = 4;
+                Gotag gotag = 5;
+                Validate validate = 6;
             }
         }
         message Go {
@@ -85,6 +90,18 @@ message Config {
             Paths paths = 2;
             // import map
             //
+        }
+        message Gotag {
+            Paths paths = 2;
+        }
+        message Validate {
+            Paths paths = 2;
+            Lang lang = 3;
+            //
+            enum Lang {
+                Go = 0;
+                Java = 1;
+            }
         }
         message Grpc_Gateway {
             Paths paths = 2;

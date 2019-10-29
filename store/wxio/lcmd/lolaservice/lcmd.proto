@@ -1,0 +1,42 @@
+// copied from github.com/grpc/grpc-go/examples/features/proto/echo/echo.proto
+syntax = "proto3";
+
+package wxio.lmcd;
+option go_package = "github.com/wxio/lcmd/lolaservice";
+
+// import "envoyproxy/validate/validate.proto";
+// import "wxio/godna/config/config.v1.proto";
+
+service Lola {
+  rpc SpinUp(SpinUpRequest) returns (SpinUpResponse) {  }
+}
+
+message SpinUpRequest {
+	string name           = 1 ;//[(validate.rules).string.min_len = 1, (wxio.dna.godna.help) = "name to be set on the container" ];
+	// bool host_mount       = 2 [(wxio.dna.godna.help) = "mount /var/run into the container"];
+	int32 nx_port         = 3 ;//[(wxio.dna.godna.help) = "if not set then random via publish all"];
+	string image          = 4; //  ImageName completion
+	string username       = 5;
+	string passwd_hash    = 6;
+	int32 gid             = 7;
+	int32 uid             = 8;
+	string home_bind_path = 9 ;//[(wxio.dna.godna.help) = "if set then path in mounted as /home else a volume with the same name as the container is used"];
+	bool cap_sys_admin  = 10;
+}
+
+message SpinUpResponse {
+  PortMap ports  = 1;
+  //
+  message PortMap {
+    map<string, Bindings> ports = 1;
+  }
+  message Bindings {
+    repeated Binding binding = 1;
+    //
+    message Binding {
+      string host_ip = 1;
+      string host_port = 2;
+    }
+  }
+}
+

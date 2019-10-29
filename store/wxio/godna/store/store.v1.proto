@@ -1,0 +1,13 @@
+syntax = "proto3";
+package wxio.dna;
+option go_package = "github.com/wxio/godna/store";
+
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.FileOptions {
+    Store store = 60000;
+}
+
+message Store {
+    bool go_mod = 10;
+}
